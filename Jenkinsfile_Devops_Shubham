@@ -1,0 +1,52 @@
+pipeline{
+       agent {
+          label 'master'
+       }
+       tools{
+           maven 'Mavan3'
+           jdk 'Java1.8'
+       }
+       stages{
+           stage('Code Checkout'){
+               steps{
+                   git credentialsId: 'Development', branch: 'master', url: 'https://github.com/devopstrainers1/addressbook.git'
+               }
+           }
+           stage('Code Validate'){
+               steps{
+                   script{
+                       sh"""
+                       mvn validate
+                       """
+                   }
+               }
+} 
+              stage('Code Compile'){
+                  steps{
+                      script{
+                          sh"""
+                          mvn Compile
+                          """
+                      }
+                  }
+}         
+              stage('Code test'){
+                  steps{
+                      script{
+                          sh"""
+                          mvn test
+                          """
+                      }
+                  }
+} 
+              stage('Code Packages'){
+                  steps{
+                      script{
+                          sh"""
+                          mvn package
+                          """
+                      }
+                  }
+              }  
+}
+}
